@@ -16,60 +16,75 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="row bg-light rounded align-items-center justify-content-center mx-0">
                     <div class="col-md-12 text-start">
-                        <div class="bg-light rounded p-4">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h6>Company Information</h6>
-                                    <p><strong>Company Name:</strong> Example Company</p>
-                                    <p><strong>Address:</strong> 123 Main Street, City, Country</p>
-                                    <p><strong>Phone:</strong> (123) 456-7890</p>
-                                    <p><strong>Email:</strong> contact@example.com</p>
+                        <form action=" {{ route('ventes.confirm') }} " method="POST">
+                            @csrf
+                            <div class="bg-light rounded p-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Company</h4>
+                                        <p><strong>Company Name:</strong> Example Company</p>
+                                        <p><strong>Address:</strong> 123 Main Street, City, Country</p>
+                                        <p><strong>Phone:</strong> (123) 456-7890</p>
+                                        <p><strong>Email:</strong> contact@example.com</p>
+                                    </div>
+                                    <div class="col-md-6 text-md-end">
+                                        <h4>Customer</h4>
+                                        <p><strong>First Name:</strong> {{ $customer->firstname }}</p>
+                                        <p><strong>Last Name:</strong> {{ $customer->lastname }}</p>
+                                        <p><strong>Phone:</strong> {{ $customer->phone }}</p>
+                                        <p><strong>Address:</strong> {{ $customer->address }}</p>
+
+                                        <!-- Hidden Customer Inputs -->
+                                        <input type="hidden" name="customer_id" value="{{ $customer->id }}">
+                                        @if ($customer->id == 0)
+                                        <input type="hidden" name="customer_firstname" value="{{ $customer->firstname }}">
+                                        <input type="hidden" name="customer_lastname" value="{{ $customer->lastname }}">
+                                        <input type="hidden" name="customer_phone" value="{{ $customer->phone }}">
+                                        <input type="hidden" name="customer_address" value="{{ $customer->address }}">
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="col-md-6 text-md-end">
-                                    <h6>Customer Information</h6>
-                                    <p><strong>First Name:</strong> {{ $customer->firstname }}</p>
-                                    <p><strong>Last Name:</strong> {{ $customer->lastname }}</p>
-                                    <p><strong>Phone:</strong> {{ $customer->phone }}</p>
-                                    <p><strong>Address:</strong> {{ $customer->address }}</p>
-                                </div>
-                            </div>
-                            <table class="table table-dark mt-4">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">N°</th>
-                                        <th scope="col">Article</th>
-                                        <th scope="col">Unit Price</th>
-                                        <th scope="col">Number</th>
-                                        <th scope="col">Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $totalPrice = 0;
-                                    @endphp
-                                    @foreach ($objects as $index => $object)
-                                        @php
-                                            $product = $products->where('id', $object->id)->first();
-                                            $totalPrice += $object->montant;
-                                        @endphp
+                                <table class="table table-dark mt-4">
+                                    <thead>
                                         <tr>
-                                            <th scope="row">{{ $index + 1 }}</th>
-                                            <td>{{ $product->libelle }}</td>
-                                            <td>{{ $product->prix_vente }}</td>
-                                            <td>{{ $object->quantite }}</td>
-                                            <td>{{ $object->montant }}</td>
+                                            <th scope="col">N°</th>
+                                            <th scope="col">Article</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Number</th>
+                                            <th scope="col">Total Price</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th scope="row" colspan="4">Total:</th>
-                                        <td>{{ $totalPrice }}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div class="row">
-                                    <div class="col-4">
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $totalPrice = 0;
+                                        @endphp
+                                        @foreach ($objects as $index => $object)
+                                            @php
+                                                $product = $products->where('id', $object->id)->first();
+                                                $totalPrice += $object->montant;
+                                            @endphp
+                                            <tr>
+                                                <th scope="row">{{ $index + 1 }}</th>
+                                                <td>{{ $product->libelle }}</td>
+                                                <td>{{ $product->prix_vente }} FCFA</td>
+                                                <td>{{ $object->quantite }}</td>
+                                                <td>{{ $object->montant }} FCFA</td>
+
+                                                <!-- Hidden Product Inputs -->
+                                                <input type="hidden" name="products[{{ $object->id }}]"
+                                                    value="{{ $object->quantite }}">
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th scope="row" colspan="4">Total:</th>
+                                            <td>{{ $totalPrice }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
                                         <div class="input-group mb-4 text-end">
                                             <span class="input-group-text">Payment Status</span>
                                             <select
@@ -77,7 +92,7 @@
                                                 aria-label="payment" name="payment" required>
                                                 <option value="Paid">Paid</option>
                                                 <option value="Credit">Credit</option>
-                                                <option value="Paid partialy">Paid partially</option>
+                                                <option value="Paid partially">Paid partially</option>
                                             </select>
                                             @error('payment')
                                                 <div class="invalid-feedback">
@@ -86,11 +101,11 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-auto">
                                         <div class="input-group mb-4 text-end">
                                             <span class="input-group-text">Remaining Amount:</span>
-                                            <input type="number" class="form-control form-control-sm" min="0" value="0"
-                                                max="{{ $totalPrice }}">
+                                            <input type="number" class="form-control form-control-sm" min="0"
+                                                value="0" max="{{ $totalPrice }}" name="remaining_amount">
                                             @error('remain')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -98,14 +113,13 @@
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
+                                <div class="modal-footer mb-4">
+                                    <button type="button" class="btn btn-warning" onclick="history.back()">Go Back</button>
+                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                </div>
                             </div>
-
-
-                            <div class="modal-footer mb-4">
-                                <button type="button" class="btn btn-warning" onclick="history.back()">Go Back</button>
-                                <button type="submit" class="btn btn-primary">Confirm</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -114,32 +128,3 @@
     </div>
     <!-- Recent Sales End -->
 @endsection
-
-{{-- <div class="col-sm-12 col-xl-12">
-                            <div class="bg-light rounded h-100 p-4">
-                                <h6 class="">Customer Information</h6>
-                                <p><strong>First Name:</strong> {{ $customer->firstname }}</p>
-                                <p><strong>Last Name:</strong> {{ $customer->lastname }}</p>
-                                <p><strong>Phone:</strong> {{ $customer->phone }}</p>
-                                <p><strong>Address:</strong> {{ $customer->address }}</p>
-
-                                <h6 class="">Product Details</h6>
-                                <div class="col-sm-12 col-xl-6 mb-4">
-                                    <div class="bg-light rounded px-2">
-                                        @foreach ($objects as $object)
-                                            <div class="input-group mt-1">
-                                                <span class="input-group-text">
-                                                    {{ $products->where('id', $object->id)->first()->libelle }}
-                                                </span>
-                                                <input class="form-control form-control-sm" type="number" value="{{ $object->quantite }}" disabled>
-                                                <span class="input-group-text">{{ $object->montant }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                                <div class="modal-footer mb-4">
-                                    <button type="button" class="btn btn-warning" onclick="history.back()">Go Back</button>
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
-                                </div>
-                            </div>
-                        </div> --}}

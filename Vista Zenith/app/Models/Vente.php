@@ -13,6 +13,8 @@ class Vente extends Model
         'client_id',
         'personnel_id',
         'status',
+        'reste',
+        'total',
     ];
 
 
@@ -21,6 +23,10 @@ class Vente extends Model
         return $this->belongsTo(Client::class, 'client_id');
     }
 
+    public function ligneVente()
+    {
+        return $this->hasMany(LigneVente::class, 'vente_id', 'id');
+    }
 
     public function personnel()
     {

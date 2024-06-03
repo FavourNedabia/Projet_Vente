@@ -12,6 +12,8 @@ class LigneVente extends Model
     protected $fillable = [
         'article_id',
         'vente_id',
+        'quantite',
+        'montant',
     ];
 
 

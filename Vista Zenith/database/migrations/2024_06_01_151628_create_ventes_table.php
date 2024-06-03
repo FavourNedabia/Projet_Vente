@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('personnel_id')->nullable(false)->constrained()->onDelete('cascade');
             $table->unsignedDouble('total')->nullable(true);
             $table->enum('status', ['Paid', 'Credit', 'Paid partialy'])->nullable(false);
-            $table->unsignedDouble('reste')->nullable(true);
+            $table->unsignedDouble('reste')->nullable(false)->default(0);
             $table->timestamps();
         });
     }

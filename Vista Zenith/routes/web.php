@@ -15,25 +15,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
-Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::post('/login', [AuthController::class, 'doLogin'])->name('login');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'doLogin'])->name('login');
 
-Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
-Route::post('/register', [AuthController::class, 'doRegister'])->name('register');
+    Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('/register', [AuthController::class, 'doRegister'])->name('register');
+});
 
-Route::get('/ventes', [HomeController::class, 'ventes'])->name('ventes');
-Route::get('/ventes.init', [HomeController::class, 'ligneVente'])->name('ventes.init');
-Route::post('/ventes.next', [HomeController::class, 'venteNext'])->name('ventes.next');
-Route::post('/ventes.overview', [HomeController::class, 'overview'])->name('ventes.overview');
 
-Route::get('/approvisionnements', [HomeController::class, 'approvisionnements'])->name('approvisionnements');
+// Routes protégées par auth middleware
+Route::middleware('auth')->group(function () {
+    // Les routes publiques
+    Route::get('/',  [HomeController::class, 'index'])->name('home');
 
-Route::get('/produits', [HomeController::class, 'produits'])->name('produits');
-Route::post('/produits', [HomeController::class, 'createProduit'])->name('produits.store');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/ventes', [HomeController::class, 'ventes'])->name('ventes');
+    Route::get('/ventes.init', [HomeController::class, 'ligneVente'])->name('ventes.init');
+    Route::post('/ventes.next', [HomeController::class, 'venteNext'])->name('ventes.next');
+    Route::post('/ventes.overview', [HomeController::class, 'overview'])->name('ventes.overview');
+    Route::post('/ventes.confim', [HomeController::class, 'confirm'])->name('ventes.confirm');
+    Route::get('/ventes.details/{id}', [HomeController::class, 'details'])->name('ventes.details');
+
+    Route::get('/approvisionnements', [HomeController::class, 'approvisionnements'])->name('approvisionnements');
+
+    Route::get('/produits', [HomeController::class, 'produits'])->name('produits');
+    Route::post('/produits', [HomeController::class, 'createProduit'])->name('produits.store');
+});
