@@ -76,33 +76,33 @@
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Username" required>
+                                    placeholder="Username"  value="{{ old('username') }}">
+                                <label for="username">Username</label>
                                 @error('username')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <label for="username">Username</label>
                             </div>
                             <div class="form-floating mb-4">
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" required>
+                                <label for="password">Password</label>
                                 @error('password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <label for="password">Password</label>
                             </div>
                             <div class="form-floating mb-4">
                                 <input type="password" class="form-control" id="password_confirmation"
                                     name="password_confirmation" placeholder="Confirm Password" required>
+                                <label for="password_confirmation">Confirm Password</label>
                                 @error('password_confirmation')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <label for="password_confirmation">Confirm Password</label>
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between mb-4">

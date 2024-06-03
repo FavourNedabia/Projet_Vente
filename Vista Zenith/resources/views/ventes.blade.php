@@ -6,8 +6,11 @@
         <div class="bg-light text-center rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Sales</h6>
-                <a type="button" class="btn btn-dark m-2 btn-fixed-width"><i class="fa fa-plus me-2"></i> Sell </a>                
+                <a type="button" href="{{ route('ventes.init') }}" class="btn btn-dark m-2"><i
+                        class="fa fa-plus me-2"></i>Sell</a>
+
             </div>
+
             <div class="table-responsive">
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
@@ -86,7 +89,7 @@
                                 <a class="btn btn-sm btn-danger btn-fixed px-1" href="">Delete</a>
                             </td>
                         </tr>
-                    
+
                         <tr>
                             <td><input class="form-check-input" type="checkbox"></td>
                             <td>01 Jan 2045</td>
@@ -157,5 +160,4 @@
         </div>
     </div>
     <!-- Recent Sales End -->
-
 @endsection

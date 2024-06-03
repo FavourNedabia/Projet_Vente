@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
+            $table->string('code')->nullable(false)->unique();
             $table->string('libelle')->nullable(false);
             $table->unsignedInteger('stock');
             $table->unsignedDouble('prix_achat');

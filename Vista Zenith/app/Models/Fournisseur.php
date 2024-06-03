@@ -16,4 +16,10 @@ class Fournisseur extends Model
         'telephone',
         'societe_id',
     ];
+
+    
+    public function societe()
+    {
+        return $this->belongsTo(Societe::class, 'societe_id');
+    }
 }

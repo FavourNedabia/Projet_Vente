@@ -27,6 +27,13 @@ Route::get('/register', [AuthController::class, 'register'])->name('auth.registe
 Route::post('/register', [AuthController::class, 'doRegister'])->name('register');
 
 Route::get('/ventes', [HomeController::class, 'ventes'])->name('ventes');
+Route::get('/ventes.init', [HomeController::class, 'ligneVente'])->name('ventes.init');
+Route::post('/ventes.next', [HomeController::class, 'venteNext'])->name('ventes.next');
+Route::post('/ventes.overview', [HomeController::class, 'overview'])->name('ventes.overview');
+
 Route::get('/approvisionnements', [HomeController::class, 'approvisionnements'])->name('approvisionnements');
+
+Route::get('/produits', [HomeController::class, 'produits'])->name('produits');
+Route::post('/produits', [HomeController::class, 'createProduit'])->name('produits.store');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

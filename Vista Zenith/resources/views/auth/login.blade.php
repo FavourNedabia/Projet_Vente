@@ -8,8 +8,6 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-    <!-- Favicon -->
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,7 +65,7 @@
                             @csrf
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username" value="{{old('username')}}"
-                                    placeholder="Username" required>
+                                    placeholder="Username" required value="{{ old('personnel')}}">
                                 <label for="username">Username</label>
                                 @error('username')
                                     {{ $message }}

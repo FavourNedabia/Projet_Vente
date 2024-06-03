@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('article_id')->nullable(false)->constrained()->onDelete('cascade');
             $table->foreignId('vente_id')->nullable(false)->constrained()->onDelete('cascade');      
             $table->unsignedInteger('quantite')->nullable(false);            
-            $table->unsignedDouble('montant')->nullable(false);  
+            $table->unsignedDouble('montant')->nullable(false);
             $table->timestamps();
         });
     }

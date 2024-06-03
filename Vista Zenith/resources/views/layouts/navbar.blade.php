@@ -15,7 +15,7 @@
 
     <div class="navbar-nav align-items-center ms-auto">
     <div class="m-n2">
-        <a type="button" class="btn btn-dark m-2 btn-fixed-width"><i class="fa fa-plus me-2"></i> Sell </a>
+        <a type="button" href="{{ route('ventes.init') }}" class="btn btn-dark m-2 btn-fixed-width"><i class="fa fa-plus me-2"></i> Sell </a>
         <a type="button" class="btn btn-dark m-2 btn-fixed-width"><i class="fa fa-plus me-2"></i>Supply</a>
     </div>
         <div class="nav-item dropdown">
