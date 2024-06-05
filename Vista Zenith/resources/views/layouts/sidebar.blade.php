@@ -39,12 +39,12 @@
             <a href="{{ route('produits') }}" class="nav-item nav-link {{ request()->routeIs('produits') ? 'active' : '' }} "><i class="fa fa-cube me-2"></i>Products</a>
             {{-- <a href="widget.html" class="nav-item nav-link"><i class="fa fa-shopping-cart me-2"></i>Sales</a> --}}
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                <a href="#" class="nav-link dropdown-toggle  {{ request()->routeIs('clients.index') ? 'active' : '' }} {{ request()->routeIs('societes.index') ? 'active' : '' }}" data-bs-toggle="dropdown"><i
                         class="fa fa-tasks me-2"></i>Others</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <div class="mx-4">
-                        <a href="signin.html" class="dropdown-item"><i class="fa fa-tags mx-1"></i>Clients</a>
-                        <a href="404.html" class="dropdown-item"><i class="fa fa-building mx-1"></i>Society</a>
+                        <a href="{{ route('clients.index') }}" class="dropdown-item  {{ request()->routeIs('clients.index') ? 'active' : '' }}"><i class="fa fa-tags mx-1"></i>Clients</a>
+                        <a href="{{ route('societes.index') }}" class="dropdown-item {{ request()->routeIs('societes.index') ? 'active' : '' }}"><i class="fa fa-building mx-1"></i>Society</a>
                         <a href="signup.html" class="dropdown-item"><i class="fa fa-truck mx-1"></i>Suppliers</a>
                         <a href="404.html" class="dropdown-item"><i class="fa fa-exclamation-circle mx-1"></i>Anomaly</a>
 

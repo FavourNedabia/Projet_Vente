@@ -24,18 +24,18 @@ class InitVenteRequest extends FormRequest
         return [
             'products' => 'required|array',
             'products.*' => 'exists:articles,id',
-            'customer' => $this->input('customer') == 0 ? '' : 'required|integer|exists:customers,id',
-            'firstname' => $this->input('customer') == 0 ? 'required|string' : '',
-            'lastname' => $this->input('customer') == 0 ? 'nullable|string' : '',
-            'phone' => $this->input('customer') == 0 ? 'nullable|string' : '',
-            'address' => $this->input('customer') == 0 ? 'nullable|string' : '',
+            'client' => $this->input('client') == 0 ? '' : 'required|integer|exists:clients,id',
+            'firstname' => $this->input('client') == 0 ? 'required|string' : '',
+            'lastname' => $this->input('client') == 0 ? 'nullable|string' : '',
+            'phone' => $this->input('client') == 0 ? 'nullable|string' : '',
+            'address' => $this->input('client') == 0 ? 'nullable|string' : '',
         ];
     }
 
     public function messages()
     {
         return [
-            'firstname.required' => 'Please select or add new customer.',
+            'firstname.required' => 'Please select or add new client.',
         ];
     }
 }

@@ -9,7 +9,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-
+    @yield('styles')
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,7 +84,7 @@
     <script src="{{ asset('lib/tempusdominus/js/moment.min.js') }}"></script>
     <script src="{{ asset('lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
     <script src="{{ asset('lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-
+    @yield('scripts')
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
 </body>

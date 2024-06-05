@@ -31,10 +31,15 @@
                                 <td> {{ $vente->created_at->format('d M Y \a\t h:i A') }} </td>
                                 <td> {{ $vente->client->prenoms }} {{ $vente->client->nom }} </td>
                                 <td> {{ $vente->total }} </td>
-                                <td> {{ $vente->status }} </td>
+                                <td>
+                                    <span
+                                        class="badge badge-status @if ($vente->status == 'Paid') bg-success @elseif($vente->status == 'Credit') bg-danger @elseif($vente->status == 'Paid partially') bg-warning @endif">
+                                        {{ $vente->status }}
+                                    </span>
+                                </td>
                                 <td> {{ $vente->reste }} </td>
                                 <td>
-                                    <a class="btn btn-sm btn-primary btn-fixed px-1" href="">Detail</a>
+                                    <a class="btn btn-sm btn-primary btn-fixed px-1" href="{{ route('ventes.details', ['id' => $vente->id]) }}">Detail</a>
                                     <a class="btn btn-sm btn-warning btn-fixed px-1" href="">Edit</a>
                                     <a class="btn btn-sm btn-danger btn-fixed px-1" href="">Delete</a>
                                 </td>

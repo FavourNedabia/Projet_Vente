@@ -57,21 +57,21 @@
                                         @enderror
                                     </div>
                                     <div class="input-group mb-4">
-                                        <span class="input-group-text">Customer</span>
-                                        <select class="form-select @error('customer') is-invalid @enderror"
-                                            aria-label="Customer" name="customer" required>
-                                            <option selected disabled value="0">Select a customer if it already exists</option>
-                                            @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}"
-                                                    {{ old('customer') == $customer->id ? 'selected' : '' }}>
-                                                    {{ $customer->libelle }}
+                                        <span class="input-group-text">Client</span>
+                                        <select class="form-select @error('client') is-invalid @enderror"
+                                            aria-label="Client" name="client" required>
+                                            <option selected value="0">Select a client if it already exists</option>
+                                            @foreach ($clients as $client)
+                                                <option value="{{ $client->id }}"
+                                                    {{ old('client') == $client->id ? 'selected' : '' }}>
+                                                    {{ $client->prenoms }} {{ $client->nom }}
                                                 </option>
                                             @endforeach
                                         </select>
                                         <a type="button" href="#" class="btn btn-primary input-group-text"
                                             data-bs-toggle="modal" data-bs-target="#exampleModal">Or New</a>
             
-                                        @error('customer')
+                                        @error('client')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -90,7 +90,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">New customer</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">New client</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -155,7 +155,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" data-bs-dismiss="modal"  class="btn btn-primary">Save the
-                                                        customer</button>
+                                                        client</button>
                                                 </div>
                                             </form>
                                         </div>

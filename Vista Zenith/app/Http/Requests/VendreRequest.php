@@ -22,16 +22,16 @@ class VendreRequest extends FormRequest
     
     public function rules(): array
     {
-        $customerId = $this->input('customer_id');
+        $clientId = $this->input('client_id');
 
         return [
             'payment' => 'required|string',
-            'remaining_amount' => 'required|numeric|min:0',
-            'customer_id' => $customerId == 0 ? 'integer|min:0' : 'required|integer|exists:customers,id',
-            'customer_firstname' => $customerId == 0 ? 'required|string' : '',
-            'customer_lastname' => $customerId == 0 ? 'nullable|string' : '',
-            'customer_phone' => $customerId == 0 ? 'nullable|string' : '',
-            'customer_address' => $customerId == 0 ? 'nullable|string' : '',
+            'remain' => 'required|numeric|min:0',
+            'client_id' => $clientId != 0 ? 'integer|min:1' : 'required|integer|exists:clients,id',
+            'client_firstname' => $clientId == 0 ? 'required|string' : '',
+            'client_lastname' => $clientId == 0 ? 'nullable|string' : '',
+            'client_phone' => $clientId == 0 ? 'nullable|string' : '',
+            'client_address' => $clientId == 0 ? 'nullable|string' : '',
             'products' => 'required|array',
             'products.*' => 'required|integer|min:1',
         ];

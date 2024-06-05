@@ -20,7 +20,7 @@
                                 <form action="{{ route('ventes.overview') }}" method="post">
                                     @csrf
                                     <h6 class="">Define quantities</h6>
-                                    <div class="col-sm-12 col-xl-6 mb-4">
+                                    <div class="col-sm-12 col-xl-8 mb-4">
                                         <div class="bg-light rounded px-2">
                                             @foreach ($validatedData['products'] as $productId)
                                                 <div class="input-group mt-1">
@@ -28,11 +28,11 @@
                                                         {{ $products->where('id', $productId)->first()->libelle }}
                                                     </span>
                                                     <input class="form-control form-control-sm" type="number"
-                                                        name="quantities[{{ $productId }}]" value="1" required>
+                                                        name="quantities[{{ $productId }}]" value="1" required min="1">
                                                     <span class="input-group-text">
                                                         {{ $products->where('id', $productId)->first()->prix_vente }}
                                                     </span>
-                                                    @error('customer')
+                                                    @error('client')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
@@ -41,12 +41,12 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                    <input type="hidden" name="customer" value="{{ $customer->id }}">
-                                    @if ($customer->id == 0)
-                                        <input type="hidden" name="firstname" value="{{ $customer->firstname }}">
-                                        <input type="hidden" name="lastname" value="{{ $customer->lastname }}">
-                                        <input type="hidden" name="phone" value="{{ $customer->phone }}">
-                                        <input type="hidden" name="address" value="{{ $customer->address }}">
+                                    <input type="hidden" name="client" value="{{ $client->id }}">
+                                    @if ($client->id == 0)
+                                        <input type="hidden" name="firstname" value="{{ $client->firstname }}">
+                                        <input type="hidden" name="lastname" value="{{ $client->lastname }}">
+                                        <input type="hidden" name="phone" value="{{ $client->phone }}">
+                                        <input type="hidden" name="address" value="{{ $client->address }}">
                                     @endif
                                     <div class="modal-footer mb-4">
                                         <button type="button" class="btn btn-warning" onclick="history.back()">Go

@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -66,9 +66,9 @@ class HomeController extends Controller
 
     public function ligneVente()
     {
-        $customers = Client::orderBy('id', 'desc')->get();
+        $clients = Client::orderBy('id', 'desc')->get();
         $products = Article::orderBy('id', 'desc')->get();
-        return view('ligne_vente', compact('customers', 'products'));
+        return view('ligne_vente', compact('clients', 'products'));
     }
 
     public function venteNext(InitVenteRequest $request)
@@ -76,7 +76,7 @@ class HomeController extends Controller
         $validatedData = $request->validated();
         $productIds = $validatedData['products'];
         $products = Article::whereIn('id', $productIds)->get();
-        $customer = Client::find($request->input('customer')) ?? (object) [
+        $client = Client::find($request->input('client')) ?? (object) [
             'id' => 0,
             'firstname' => $validatedData['firstname'],
             'lastname' => $validatedData['lastname'],
@@ -84,73 +84,88 @@ class HomeController extends Controller
             'address' => $validatedData['address'],
         ];
 
-        return view('vente_next', compact('validatedData', 'products', 'customer'));
+        return view('vente_next', compact('validatedData', 'products', 'client'));
     }
 
     public function overview(Request $request)
     {
-        $data = $request->all();
-        $products = Article::whereIn('id', array_keys($data['quantities']))->get();
-        $objects = [];
-        foreach ($data['quantities'] as $productId => $quantity) {
-            $article = Article::find($productId);
-            if ($article) {
-                $montant = $article->prix_vente * $quantity;
-                $object = (object) [
-                    'id' => $article->id,
-                    'quantite' => $quantity,
-                    'montant' => $montant,
-                ];
-                $objects[] = $object;
+        try {
+            $data = $request->all();
+            $products = Article::whereIn('id', array_keys($data['quantities']))->get();
+            $objects = [];
+            foreach ($data['quantities'] as $productId => $quantity) {
+                $article = Article::find($productId);
+                if ($article) {
+                    $montant = $article->prix_vente * $quantity;
+                    $object = (object) [
+                        'id' => $article->id,
+                        'quantite' => $quantity,
+                        'montant' => $montant,
+                    ];
+                    $objects[] = $object;
+                }
             }
-        }
 
-        $customerId = $data['customer'];
-        if ($customerId != 0) {
-            $customer = Client::find($customerId);
-        } else {
-            $customer = (object) [
-                'id' => 0,
-                'firstname' => $data['firstname'],
-                'lastname' => $data['lastname'],
-                'phone' => $data['phone'],
-                'address' => $data['address'],
-            ];
-        }
+            $clientId = $data['client'];
+            if ($clientId != 0) {
+                $client = Client::find($clientId);
+            } else {
+                $client = (object) [
+                    'id' => 0,
+                    'prenoms' => $data['firstname'],
+                    'nom' => $data['lastname'],
+                    'telephone' => $data['phone'],
+                    'adresse' => $data['address'],
+                ];
+            }
 
-        return view('overview', compact('objects', 'customer', 'products'));
+            return view('overview', compact('objects', 'client', 'products'));
+        } catch (\Exception $e) {
+            return view('404')->with('error', 'Une erreur est survenue lors de l\'enregistrement de la vente : ' . $e->getMessage());
+        }
     }
 
 
 
+    // public function confirm()
+    // {
+    //     return view('404')->with('error', 'Une erreur est survenue lors de l\'enregistrement de la vente : ');
+    // }
+
     public function confirm(VendreRequest $request)
     {
+        Log::info('Entrée dans la méthode confirm.');
         $validatedData = $request->validated();
 
         try {
             DB::beginTransaction();
 
-            $customer = Client::find($request->customer_id);
-            if (!$customer) {
-                $customer = Client::create([
-                    'prenoms' => $request->customer_firstname,
-                    'nom' => $request->customer_lastname,
-                    'telephone' => $request->customer_phone,
-                    'adresse' => $request->customer_address,
-                ]);
-            }
+            // $client = Client::find($request->client_id);
+            // if (!$client) {
+            $client = Client::create([
+                'nom' => $request->client_lastname,
+                'prenoms' => $request->client_firstname,
+                'telephone' => $request->client_phone,
+                'adresse' => $request->client_address,
+            ]);
+            // }
 
             $sale = Vente::create([
-                'client_id' => $customer->id,
+                'client_id' => $client->id,
                 'status' => $request->payment,
-                'reste' => $request->remaining_amount,
-                'personnel_id' => Auth::user() ? Auth::user()->personnel_id : 0,
+                'reste' => $request->remain,
+                'personnel_id' => Auth::check() ? Auth::user()->personnel_id : 0,
             ]);
 
             $total = 0;
             foreach ($request->products as $productId => $quantity) {
                 $product = Article::find($productId);
                 if ($product) {
+                    // Vérifiez si le stock est suffisant
+                    if ($product->stock < $quantity) {
+                        throw new \Exception('Stock insuffisant pour l\'article ' . $product->nom);
+                    }
+
                     $product->stock -= $quantity;
                     $product->save();
 
@@ -162,9 +177,10 @@ class HomeController extends Controller
                     ]);
 
                     $total += $product->prix_vente * $quantity;
+                } else {
+                    throw new \Exception('Produit non trouvé: ' . $productId);
                 }
             }
-
 
             $sale->total = $total;
             $sale->save();
@@ -174,10 +190,9 @@ class HomeController extends Controller
             return redirect()->route('ventes.details', ['id' => $sale->id])->with('success', 'Vente enregistrée avec succès !');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'enregistrement de la vente : ' . $e->getMessage());
+            return redirect()->route('ventes.create')->with('error', 'Une erreur est survenue lors de l\'enregistrement de la vente : ' . $e->getMessage());
         }
     }
-
 
 
     public function details($id)
@@ -194,8 +209,8 @@ class HomeController extends Controller
 
     public function produits()
     {
-        $categories = Categorie::all()->reverse();
-        $products = Article::all()->reverse();
+        $categories = Categorie::orderBy('id', 'desc')->get();
+        $products = Article::orderBy('id', 'desc')->get();
 
         return view('produits', compact('categories', 'products'));
     }

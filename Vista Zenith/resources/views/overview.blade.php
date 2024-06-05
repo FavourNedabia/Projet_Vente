@@ -28,19 +28,19 @@
                                         <p><strong>Email:</strong> contact@example.com</p>
                                     </div>
                                     <div class="col-md-6 text-md-end">
-                                        <h4>Customer</h4>
-                                        <p><strong>First Name:</strong> {{ $customer->firstname }}</p>
-                                        <p><strong>Last Name:</strong> {{ $customer->lastname }}</p>
-                                        <p><strong>Phone:</strong> {{ $customer->phone }}</p>
-                                        <p><strong>Address:</strong> {{ $customer->address }}</p>
+                                        <h4>Client</h4>
+                                        <p><strong>First Name:</strong> {{ $client->prenoms }}</p>
+                                        <p><strong>Last Name:</strong> {{ $client->nom }}</p>
+                                        <p><strong>Phone:</strong> {{ $client->telephone }}</p>
+                                        <p><strong>Address:</strong> {{ $client->adresse }}</p>
 
-                                        <!-- Hidden Customer Inputs -->
-                                        <input type="hidden" name="customer_id" value="{{ $customer->id }}">
-                                        @if ($customer->id == 0)
-                                        <input type="hidden" name="customer_firstname" value="{{ $customer->firstname }}">
-                                        <input type="hidden" name="customer_lastname" value="{{ $customer->lastname }}">
-                                        <input type="hidden" name="customer_phone" value="{{ $customer->phone }}">
-                                        <input type="hidden" name="customer_address" value="{{ $customer->address }}">
+                                        <!-- Hidden Client Inputs -->
+                                        <input type="hidden" name="client_id" value="{{ $client->id }}">
+                                        @if ($client->id == 0)
+                                        <input type="hidden" name="client_firstname" value="{{ $client->prenoms }}">
+                                        <input type="hidden" name="client_lastname" value="{{ $client->nom }}">
+                                        <input type="hidden" name="client_phone" value="{{ $client->telephone }}">
+                                        <input type="hidden" name="client_address" value="{{ $client->adresse }}">
                                         @endif
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                                         <div class="input-group mb-4 text-end">
                                             <span class="input-group-text">Remaining Amount:</span>
                                             <input type="number" class="form-control form-control-sm" min="0"
-                                                value="0" max="{{ $totalPrice }}" name="remaining_amount">
+                                                value="0" max="{{ $totalPrice }}" name="remain">
                                             @error('remain')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}

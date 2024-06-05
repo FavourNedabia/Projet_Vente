@@ -10,6 +10,22 @@
         }
     </style>
     <!-- Recent Sales Start -->
+    <div class="w-100 pt-2 px-5">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if ($errors->any('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-circle me-2"></i>
+                {{ $errors->first() }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+    </div>
     <div class="container-fluid pt-4 px-4">
         <div class="bg-light text-center rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
@@ -22,11 +38,11 @@
                         <div class="bg-light rounded p-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4>Company</h4>
-                                    <p><strong>Company Name:</strong> Example Company</p>
-                                    <p><strong>Address:</strong> 123 Main Street, City, Country</p>
-                                    <p><strong>Phone:</strong> (123) 456-7890</p>
-                                    <p><strong>Email:</strong> contact@example.com</p>
+                                    <h4>Seller</h4>
+                                    <p><strong>First Name:</strong> {{ $sale->personnel->nom }}</p>
+                                    <p><strong>Last Name:</strong> {{ $sale->personnel->prenoms }}</p>
+                                    <p><strong>Phone:</strong> {{ $sale->personnel->telephone }}</p>
+                                    <p><strong>Address:</strong> {{ $sale->personnel->adresse }}</p>
                                 </div>
                                 <div class="col-md-6 text-md-end">
                                     <h4>Customer</h4>
@@ -74,7 +90,7 @@
                             <div class="row justify-content-end">
                                 <div class="col-auto">
                                     <p><strong>Payment Status:</strong>
-                                        <span class="badge badge-status @if($sale->status == 'Paid') bg-success @elseif($sale->status == 'Credit') bg-warning @elseif($sale->status == 'Paid partially') bg-info @endif">
+                                        <span class="badge badge-status @if($sale->status == 'Paid') bg-success @elseif($sale->status == 'Credit') bg-danger @elseif($sale->status == 'Paid partially') bg-warning @endif">
                                             {{ $sale->status }}
                                         </span>
                                     </p>
@@ -88,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer mb-4">
-                                <button type="button" class="btn btn-warning" onclick="history.back()">Go Back</button>
+                                <a type="button" class="btn btn-warning" href="{{ route('ventes') }}">Go Back</a>
                                 <button type="button" class="btn btn-primary" onclick="window.print()">Print</button>
                             </div>
                         </div>

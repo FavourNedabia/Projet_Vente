@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('societes', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
+            $table->string('adresse')->nullable();
+            $table->string('code_postal')->nullable();
+            $table->string('ville')->default('Lomé');
+            $table->string('pays')->default('Togo');
+            $table->string('telephone');
+            $table->string('email')->unique();
+            $table->string('site_web')->nullable();
+            $table->text('objet_social')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

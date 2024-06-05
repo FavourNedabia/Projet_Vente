@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SocieteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +33,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/',  [HomeController::class, 'index'])->name('home');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+
+    Route::get('/societes.index', [SocieteController::class, 'index'])->name('societes.index');
+    Route::post('/societes.store', [SocieteController::class, 'store'])->name('societes.store');
+    // Route::post('/societes', [SocieteController::class, 'store'])->name('societes.store');
+    // Route::get('/societes/{societe}', [SocieteController::class, 'show'])->name('societes.show');
+    // Route::get('/societes/{societe}/edit', [SocieteController::class, 'edit'])->name('societes.edit');
+    // Route::put('/societes/{societe}', [SocieteController::class, 'update'])->name('societes.update');
+    // Route::delete('/societes/{societe}', [SocieteController::class, 'destroy'])->name('societes.destroy');
+
+
+    Route::get('/clients.index', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/clients.achats/{id}', [ClientController::class, 'achats'])->name('clients.achats');
+    Route::post('/clients.store', [ClientController::class, 'store'])->name('clients.store');
 
     Route::get('/ventes', [HomeController::class, 'ventes'])->name('ventes');
     Route::get('/ventes.init', [HomeController::class, 'ligneVente'])->name('ventes.init');
